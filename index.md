@@ -1,37 +1,73 @@
-## Welcome to GitHub Pages
+import androidx.appcompat.app.AppCompatActivity;
 
-You can use the [editor on GitHub](https://github.com/fatih40/Progress-bar-Timer-Android-Studio/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+import java.util.Timer;
+import java.util.TimerTask;
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+public class MainActivity extends AppCompatActivity {
 
-```markdown
-Syntax highlighted code block
+    Button start;
+    ProgressBar progressBar;
+   private int counter=0;
+   Timer t=new Timer();
+    TimerTask tt;
 
-# Header 1
-## Header 2
-### Header 3
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-- Bulleted
-- List
+        progressBarkismi();
 
-1. Numbered
-2. List
+    }
+    public void progressBarkismi(){
+        start=findViewById(R.id.button);
+        progressBar=findViewById(R.id.progress_bar);
 
-**Bold** and _Italic_ and `Code` text
+        start.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, final MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                         t=new Timer();
+                         tt=new TimerTask() {
+                            @Override
+                            public void run() {
+                                counter++;
+                                progressBar.setProgress(counter);
+                                if(counter ==100)
+                                    t.cancel();
 
-[Link](url) and ![Image](src)
-```
+                            }
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+                        };
+                        t.schedule(tt,0,100);
+                        progressBar.setVisibility(View.VISIBLE);
+                        return true;
+                        case MotionEvent.ACTION_UP:
 
-### Jekyll Themes
+                            t.cancel();
+                            progressBar.setProgress(counter=0);
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/fatih40/Progress-bar-Timer-Android-Studio/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+                            return true;
+                }
+                return false;
+            }
+        });
 
-### Support or Contact
+        }
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+
+
+
+
+    }
+
